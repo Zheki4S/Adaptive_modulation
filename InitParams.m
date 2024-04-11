@@ -1,10 +1,10 @@
 function params = InitParams(snr, modType)
     
-    params.chFs = 50e4; % Only for chanel coefs
+    params.chFs = 50e1; % Only for chanel coefs
     params.Fs = 50e6; % Sampling frequency
     params.Fc = 11e9; % Carrier frequency
     params.N = 16; % Number of reflectors in a quater
-    params.Fd = 10; % max dopler offset 
+    params.Fd = 60; % max dopler offset 
     
     params.groupLen = 10; % Samples in group for adaptive modulation alghoritm
     params.groupsNum = 10000; % Number of groups
@@ -22,11 +22,7 @@ function params = InitParams(snr, modType)
     H = 10.^(H /20); % convert amplitude & make linear
     params.tay = tay;
     params.H = H;
-    
-
-    params.fourieLength = 100;
-    params.chFs = params.chFs / params.fourieLength;
-    
+        
 
     % Modulation type: BPSK, QPSK, 8PSK, QAM16 or Adaptive
     initialModType = 'BPSK';

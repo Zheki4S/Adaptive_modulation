@@ -5,8 +5,7 @@ function distortions = InitDistortions(params)
     tay = params.tay;
     H = params.H;
     N = length(H);
-    fourieLength = params.fourieLength;
-    len = params.sigLen / fourieLength;
+    len = params.sigLen;
 
     % Dynamic impulse response
     hk = ray(params);
@@ -22,16 +21,17 @@ function distortions = InitDistortions(params)
     end    
     
     % Transformation to gain
-    Hfs = zeros(len, fourieLength);
+    Hfs = zeros(len, iRlen);
     for id = 1:len
-       Hfs(id, :) = fft(iRs(id, :), fourieLength); 
+       Hfs(id, :) = fft(iRs(id, :)); 
     end
           
     % Phase compensation  
     Hfs = abs(Hfs); 
-%     hold on; grid on;
+    % hold on; grid on;
     Hfs = reshape(Hfs, 1, []);
-%     plot(Hfs);
+    Hfs = Hfs(1:len);
+
     % Thermal noise
     Z = randn(1, params.sigLen) + 1i * randn(1, params.sigLen);
     Zfreq = fft(Z);

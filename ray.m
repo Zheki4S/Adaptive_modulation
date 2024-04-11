@@ -12,7 +12,7 @@ function [hArr] = ray(params)
     n = 1 : N;
     adMtx = hadamard(N);
     teta  = rand(1, N) * 2 * pi;
-    h = zeros(L/(params.fourieLength), delCount);
+    h = zeros(L, delCount);
     
     % I
     for id = 1:delCount

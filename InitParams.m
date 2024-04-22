@@ -1,35 +1,28 @@
 function params = InitParams(snr, modType)
     
-    params.chFs = 50e1; % Only for chanel coefs
+    params.chFs = 7500; % Only for chanel coefs
     params.Fs = 50e6; % Sampling frequency
     params.Fc = 11e9; % Carrier frequency
     params.N = 16; % Number of reflectors in a quater
-    params.Fd = 60; % max dopler offset 
+    params.Fd = 1; % max dopler offset 
     
     params.groupLen = 10; % Samples in group for adaptive modulation alghoritm
     params.groupsNum = 10000; % Number of groups
     params.sigLen = params.groupLen * params.groupsNum; % Samples in simulation
-    
     params.snr = snr; % dB
     
     
-    % Power delay profile
-    tay = [0, 0.6232, 0.6915, 0.9037, 1.4128, 2.5329];
-    %tay = [0, 0.31, 0.71, 1.09, 1.73, 2.51]; % mcs
-    tay = tay .* 10^-6; % convert to sec
-    H = [0, -6.3155, -7.007, -9.1581, -14.3164, -25.6675];
-    %H = [0, -1, -9, -10, -15, -20]; % dB
-    H = 10.^(H /20); % convert amplitude & make linear
-    params.tay = tay;
-    params.H = H;
-        
-
     % Modulation type: BPSK, QPSK, 8PSK, QAM16 or Adaptive
     initialModType = 'BPSK';
-  %  params.powerThresholdList = [0.515, 1.16]; % Dopler - 1Hz
-%     params.powerThresholdList = [0.499, 1.28]; % Dopler - 10Hz
-    params.powerThresholdList = [0.714, 1.137]; % Dopler - 60Hz
     
+    switch params.Fd
+        case 1
+          params.powerThresholdList = [0.4211, 1.1075]; % Dopler - 1Hz
+        case 10  
+          params.powerThresholdList = [0.4183, 1.1026]; % Dopler - 10Hz
+        case 60  
+          params.powerThresholdList = [0.4298, 1.1014]; % Dopler - 60Hz
+    end
     if(strcmp(modType, 'Adapt'))
         params.modType = initialModType;
         params.adaptMode = true;

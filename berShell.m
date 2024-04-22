@@ -4,10 +4,22 @@ function berShell()
     seed = 110;
     rand('state', seed);
     randn('state', seed);
-    maxErrors = 1000;
+    maxErrors = 10000;
    
-    modType = 'QPSK';
-    snrArr = -15:1:25;
+    modType = 'Adapt';
+    snrArr = -15:1:20;
+    switch modType
+        case 'BPSK'
+            snrArr = -15:1:24;
+        case 'QPSK'
+            snrArr = -15:1:28;
+        case '8PSK'
+            snrArr = -15:1:30;
+        case 'QAM16'
+            snrArr = -15:1:34;
+        case 'QAM64'
+            snrArr = -15:1:40;    
+    end   
 
     berFunc = [];
 

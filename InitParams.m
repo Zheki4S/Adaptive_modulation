@@ -1,10 +1,10 @@
 function params = InitParams(snr, modType)
     
-    params.chFs = 7500; % Only for chanel coefs
+    params.chFs = 5000; % Only for chanel coefs
     params.Fs = 50e6; % Sampling frequency
     params.Fc = 11e9; % Carrier frequency
     params.N = 16; % Number of reflectors in a quater
-    params.Fd = 1; % max dopler offset 
+    params.Fd = 60; % max dopler offset 
     
     params.groupLen = 10; % Samples in group for adaptive modulation alghoritm
     params.groupsNum = 10000; % Number of groups
@@ -13,7 +13,12 @@ function params = InitParams(snr, modType)
     
     
     % Modulation type: BPSK, QPSK, 8PSK, QAM16 or Adaptive
-    initialModType = 'BPSK';
+    
+    % Params used when adaptive modtype switch on
+    modTypeSetNum = 1;
+    modTypeLists = {["BPSK", "QPSK", "8PSK"];
+                    ["QPSK", "QAM16", "QAM16"]};
+    
     
     switch params.Fd
         case 1
@@ -24,11 +29,17 @@ function params = InitParams(snr, modType)
           params.powerThresholdList = [0.4298, 1.1014]; % Dopler - 60Hz
     end
     if(strcmp(modType, 'Adapt'))
-        params.modType = initialModType;
+        params.initialModType = 'BPSK';
+        params.delay = 1;
         params.adaptMode = true;
+        params.modTypeList = modTypeLists{modTypeSetNum,:};
     else
         params.modType = modType;
+        params.initialModType = modType;
+        params.delay = 0;
         params.adaptMode = false;
+        params.modTypeList = string(modType);
+        params.powerThresholdList = [];
     end
     
     load('mapper_data.mat');

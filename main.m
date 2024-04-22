@@ -10,54 +10,46 @@ function [errBits, allBits] = main(snr, modType)
     qpskCtr = 0;
     psk8Ctr = 0;
     
-    th1 = params.powerThresholdList(1);
-    th2 = params.powerThresholdList(2);
+
+    powerThreshList = [0, params.powerThresholdList, 255];
+    HPowerMean = distortions.HPowerMean;
     
-    for group_id = 1 : params.groupsNum
+    for modGroupId = 1:size(params.modTypeList, 2)
+        
+        params.modType = params.modTypeList(:, modGroupId);
+        corr4modIdx = find((HPowerMean < powerThreshList(modGroupId + 1)) & (distortions.HPowerMean >= powerThreshList(modGroupId))) + params.delay;
+        corr4modIdx = corr4modIdx(corr4modIdx <= length(HPowerMean));
+        if (params.adaptMode && params.modType == params.initialModType)
+           corr4modIdx = [1:params.delay, corr4modIdx]; 
+        end
+        corr4modPwr = HPowerMean(corr4modIdx);
+        idx4samples = (corr4modIdx - 1).' * params.groupLen;
+        idx4samples = reshape((idx4samples + (0:9)).', 1, []) + 1;
+        currHk = distortions.Hk(idx4samples); 
+        currZ  = distortions.Z(idx4samples);
+        
+    
+        
         % Generate bit sequence
-        txTb = source(params);
+        txTb = source(params, length(corr4modPwr));
         params.txTb = txTb;
         
         % Mapping
         [modData, params] = mapper(txTb, params);
-
+        
         % Channel
-        codedSignal = applyChannel(modData, params, distortions, group_id);
+        codedSignal = applyChannel(modData, currHk, currZ);
 
-        
         % Demapper
-        recievedBits = demapper(codedSignal, params);  
-        
-        % Modtype switch
-        estSnr = distortions.HPowerMean(group_id);
-%        disp(params.modType);
-        if(params.adaptMode)
-            if(estSnr < th1)
-                params.modType = 'BPSK';
-                bpskCtr = bpskCtr + 1;
-            end
-
-            if(estSnr >= th1 && (estSnr < th2))
-                params.modType = 'QPSK';  
-                qpskCtr = qpskCtr + 1;
-            end
-
-            if(estSnr >= th2)
-                params.modType = '8PSK';
-                psk8Ctr = psk8Ctr + 1;
-            end
-
-        end
+        recievedBits = demapper(codedSignal, params); 
         
         % Results
         [errBitsNow, ber] = monitorResults(recievedBits, params);
         errBits = errBits + errBitsNow;
         allBits = allBits + length(params.txTb);
-    
+        
+      %  disp([char(params.modType), ': ', num2str(100 * length(corr4modIdx) ./ params.groupsNum), '%']);
+        
     end
-    
-%             
-%     disp(["BPSK: ", num2str(100 * bpskCtr ./ params.groupsNum), "%"]);
-%     disp(["QPSK: ", num2str(100 * qpskCtr ./ params.groupsNum), "%"]);
-%     disp(["8PSK: ", num2str(100 * psk8Ctr ./ params.groupsNum), "%"]);
+
 end

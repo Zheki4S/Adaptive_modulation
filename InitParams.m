@@ -1,12 +1,16 @@
-function params = InitParams(snr, modType)
+function params = InitParams(snr, modType, Fd)
     
-    params.chFs = 5000; % Only for chanel coefs
+    params.chFs = 7500; % Only for chanel coefs
     params.Fs = 50e6; % Sampling frequency
+    params.BW = 500e3; % Band width
     params.Fc = 11e9; % Carrier frequency
     params.N = 16; % Number of reflectors in a quater
-    params.Fd = 60; % max dopler offset 
+    params.Fd = Fd; % max dopler offset 
     
     params.groupLen = 10; % Samples in group for adaptive modulation alghoritm
+    params.blockErrAllow = 2; % Max number of erorrs in a block when the block is considered correct
+    params.pilotSymbs = 0; % Number of pilot symbols in group
+    params.codeRate = 1;
     params.groupsNum = 10000; % Number of groups
     params.sigLen = params.groupLen * params.groupsNum; % Samples in simulation
     params.snr = snr; % dB

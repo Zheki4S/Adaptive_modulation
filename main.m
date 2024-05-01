@@ -1,14 +1,16 @@
-function [errBits, allBits] = main(snr, modType)
+function [errBits, allBits, errBlocks, allBlocks, Th] = main(snr, modType, Fd)
     
     % Initialization
-    params = InitParams(snr, modType);
+    params = InitParams(snr, modType, Fd);
     distortions = InitDistortions(params);
     
     allBits = 0;
     errBits = 0;
-    bpskCtr = 0;
-    qpskCtr = 0;
-    psk8Ctr = 0;
+    
+    allBlocks = 0;
+    errBlocks = 0;
+    
+    Th = 0;
     
 
     powerThreshList = [0, params.powerThresholdList, 255];
@@ -44,12 +46,26 @@ function [errBits, allBits] = main(snr, modType)
         recievedBits = demapper(codedSignal, params); 
         
         % Results
-        [errBitsNow, ber] = monitorResults(recievedBits, params);
+        [errBitsNow, errBlocksNow] = monitorResults(recievedBits, params);
+        
+        allBlocksNow = length(params.txTb) / params.groupLen / params.numBitsPerSymb;
+        
+        % BLER
+        errBlocks = errBlocks + errBlocksNow;
+        allBlocks = allBlocks + allBlocksNow;
+        
+        % Through pass
+        blerNow = errBlocksNow / allBlocksNow;
+        ThNow = params.codeRate * params.numBitsPerSymb * (params.groupLen - params.pilotSymbs) * (1 - blerNow) * params.BW ./ params.groupLen;
+        Th = Th + allBlocksNow * ThNow;
+        
+        % BER
         errBits = errBits + errBitsNow;
         allBits = allBits + length(params.txTb);
         
       %  disp([char(params.modType), ': ', num2str(100 * length(corr4modIdx) ./ params.groupsNum), '%']);
         
     end
-
+     
+    Th = Th ./ params.groupsNum;
 end

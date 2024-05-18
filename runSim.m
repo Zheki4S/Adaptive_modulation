@@ -12,11 +12,14 @@
 % xlabel('snr, dB'); title('BER');
 
 
-berShell('QAM16', 60);
-berShell('Adapt', 1);
-berShell('Adapt', 10);
-berShell('Adapt', 60);
+berShell('QPSK', 60, 'BER');
+berShell('QAM16', 60, 'BER');
+berShell('QAM64', 60, 'BER');
+% berShell('Adapt', 1);
+% berShell('Adapt', 10);
+% berShell('Adapt', 60);
 
 % legend('Cmp: Adapt | Fd = 1Hz', 'Cmp: Adapt | Fd = 10Hz', 'Cmp: Adapt | Fd = 60Hz', ...
 %        'QPSK', 'Adapt | Fd = 1Hz', 'Adapt | Fd = 10Hz', 'Adapt | Fd = 60Hz');
-legend('QPSK', 'Adapt | Fd = 1Hz', 'Adapt | Fd = 10Hz', 'Adapt | Fd = 60Hz');
+%legend('QPSK', 'Adapt | Fd = 1Hz', 'Adapt | Fd = 10Hz', 'Adapt | Fd = 60Hz');
+legend('QPSK','16QAM', '64QAM');

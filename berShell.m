@@ -4,7 +4,7 @@ function berShell(modType, Fd, measType)
     seed = 110;
     rand('state', seed);
     randn('state', seed);
-    maxErrors = 100000;
+    maxErrors = 10000;
     
     switch Fd
         case 1

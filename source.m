@@ -1,10 +1,3 @@
-function bits = source(params, corrGroupsNum)
-    
-    modType = params.modType;
-    numBitsPerSymb = params.numBitMap(modType);
-    params.tbLength = params.groupLen * corrGroupsNum * numBitsPerSymb;
-    
-
-    bits = randn(1, params.tbLength) > 0;
-    
+function bits = source(fullBitSeqLen)
+    bits = randn(1, fullBitSeqLen) > 0;  
 end

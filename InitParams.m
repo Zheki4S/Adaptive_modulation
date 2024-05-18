@@ -8,7 +8,7 @@ function params = InitParams(snr, modType, Fd)
     params.Fd = Fd; % max dopler offset 
     
     params.groupLen = 10; % Samples in group for adaptive modulation alghoritm
-    params.blockErrAllow = 2; % Max number of erorrs in a block when the block is considered correct
+    params.blockErrAllow = 1; % Max number of erorrs in a block when the block is considered correct
     params.pilotSymbs = 0; % Number of pilot symbols in group
     params.codeRate = 1;
     params.groupsNum = 10000; % Number of groups

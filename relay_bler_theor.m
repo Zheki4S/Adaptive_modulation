@@ -1,24 +1,25 @@
 clear;
- groupLen = 20;
+ groupLen = 10;
  groupErrAllowed = 1;
 
 
 
 
 % % BPSK
-% snrArr = -15:1:24;
+snrArr = -15:1:24;
+p0 = 10.^(snrArr./10); 
+BER = 0.5*(1 - sqrt((p0./(p0 + 1))));
 
-% p0 = 10.^(snrArr./10); 
-% 
-% BER = 0.5*(1 - sqrt((p0./(p0 + 1))));
-% 
-% col = "blue";
-% figure;
-% semilogy(snrArr, BER, 'Marker', 'v', 'Color', col, 'MarkerEdgeColor', col, 'MarkerFaceColor', col);
-% hold on;
-% grid on;
-% xlabel("SNR, dB");
-% ylabel("BER");
+for id = 0:groupErrAllowed
+   C(id + 1) = nchoosek(groupLen, id);
+end
+blockOk = C .* BER.'.^(0:groupErrAllowed) .* (1 - BER.').^(groupLen:-1:(groupLen - groupErrAllowed));
+blockOk = [blockOk, zeros(1,length(BER)).'];
+blockOk = sum(blockOk.');
+BLER = 1 - blockOk;
+col = "red";
+semilogy(snrArr, BLER, 'Marker', 'v', 'Color', col, 'MarkerEdgeColor', col, 'MarkerFaceColor', col);
+hold on; grid on;
 
 % QPSK
 snrArr = -15:1:28;

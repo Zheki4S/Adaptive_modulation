@@ -37,13 +37,9 @@ function [indexes, distortions] = calcIndexes(params, distortions)
 
     for modGroupId = 1:size(params.modTypeList, 2)
         temp = bitsIndexesRow(indexes.idx4samples{modGroupId});
-        indexes.bitsIndexes{modGroupId, :} = reshape(temp - (0:numBitsVec(modGroupId)-1).', 1, []);
+        indexes.bitsIndexes{modGroupId, :} = reshape(flipud(temp - (0:numBitsVec(modGroupId)-1).'), 1, []);
     end
     
-    max4EveryMod = zeros(1, size(params.modTypeList, 2));
-    for id = 1:size(params.modTypeList, 2)
-        max4EveryMod(id) = max(indexes.bitsIndexes{id});
-    end
-    
+   
 end
 

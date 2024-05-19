@@ -14,7 +14,6 @@ function berShell(modType, Fd, measType)
         case 60
             maxErrors = 10000;
     end       
-    %modType = 'Adapt';
     snrArr = -15:1:25;
     switch modType
         case 'BPSK'

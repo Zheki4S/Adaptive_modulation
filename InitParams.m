@@ -22,9 +22,9 @@ function params = InitParams(snr, modType, Fd)
     
     % Modulation type: BPSK, QPSK, 8PSK, QAM16 or Adaptive
     % Params used when adaptive modtype switch on
-    modTypeSetNum = 1;
+    modTypeSetNum = 2;
     modTypeLists = {["BPSK", "QPSK", "8PSK"];
-                    ["QPSK", "QAM16", "QAM16"]};
+                    ["QPSK", "QAM16", "QAM64"]};
     
     
     switch params.Fd

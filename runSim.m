@@ -24,7 +24,8 @@
 %legend('QPSK', 'Adapt | Fd = 1Hz', 'Adapt | Fd = 10Hz', 'Adapt | Fd = 60Hz');
 %legend('QPSK','16QAM', '64QAM');
 
-berShell('BPSK', 60, 'BLER');
-berShell('QPSK', 60, 'BLER');
-berShell('QAM16', 60, 'BLER');
-berShell('QAM64', 60, 'BLER');
+
+berShell('QPSK', 60, 'Th');
+berShell('8PSK', 60, 'Th');
+berShell('QAM16', 60, 'Th');
+berShell('QAM64', 60, 'Th');

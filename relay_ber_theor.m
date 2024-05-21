@@ -27,9 +27,9 @@ semilogy(snrArr, BER, 'Marker', 'v', 'Color', col, 'MarkerEdgeColor', col, 'Mark
 
 
 %8PSK
-snrArr = -15:1:30;
+snrArr = -15:1:32;
 p0 = 10.^(snrArr./10);
-BER = 0.5*(1 - sqrt(((1/4 * p0)./(1/4 * p0 + 1))));
+BER = 0.5*(1 - sqrt(((1/5 * p0)./(1/5 * p0 + 1))));
 
 col = "green";
 semilogy(snrArr, BER, 'Marker', 'v', 'Color', col, 'MarkerEdgeColor', col, 'MarkerFaceColor', col);

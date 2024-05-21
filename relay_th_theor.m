@@ -49,7 +49,7 @@ case '8PSK'
         groupLen = groupLenSymb * numBitsPerSymb;
         snrArr = -15:1:30;
         p0 = 10.^(snrArr./10);
-        BER = 0.5*(1 - sqrt(((1/4 * p0)./(1/4 * p0 + 1))));
+        BER = 0.5*(1 - sqrt(((1/5 * p0)./(1/5 * p0 + 1))));
         for id = 0:groupErrAllowed
            C(id + 1) = nchoosek(groupLen, id);
         end
